@@ -1,6 +1,6 @@
 from service.web_serach_engine import WebSerachEngine
-from service.implements.yahoo_web_serach_engine import YahooWebSerachEngine
-from revChatGPTLLM import revChatGPTLLM
+from service.search_word_extractor import SearchWordExtractor
+
 from llama_index.llms.base import LLM
 from llama_index import (
     ServiceContext,
@@ -9,21 +9,22 @@ from llama_index import (
 )
 
 
-class OpenChatLLM:
+class OpenChatAI:
     llm: LLM
     web_search_engine: WebSerachEngine
+    search_word_extractor: SearchWordExtractor
 
-    def __init__(self, llm: LLM, web_search_engine: WebSerachEngine) -> None:
+    def __init__(self, llm: LLM, web_search_engine: WebSerachEngine, search_word_extractor: SearchWordExtractor) -> None:
         self.llm = llm
         self.web_search_engine = web_search_engine
-        pass
+        self.search_word_extractor = search_word_extractor
 
-    def get_urls(self, keyword):
+    def __get_urls(self, keyword)->list[str]:
         url_datas = self.web_search_engine.search(keyword)
         urls = [item.url for item in url_datas]
         return urls
 
-    def web_query(self, query, web_page_urls):
+    def __web_query(self, query, web_page_urls):
 
         # define our LLM
         service_context = ServiceContext.from_defaults(
@@ -41,10 +42,9 @@ class OpenChatLLM:
         response = query_engine.query(query)
 
         return response
-
-
-open_chat_llm = OpenChatLLM(revChatGPTLLM(), YahooWebSerachEngine())
-query = "WBCでの大谷翔平の活躍は？"
-urls = open_chat_llm.get_urls(query)
-response = open_chat_llm.web_query(query, urls[:3])
-print(response)
+    
+    def ask(self,question):
+        keyword = self.search_word_extractor.extract(question)
+        urls = self.__get_urls(keyword)
+        response = self.__web_query(question,urls[:3])
+        return response

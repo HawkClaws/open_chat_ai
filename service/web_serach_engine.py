@@ -1,7 +1,3 @@
-import lxml.html
-import requests
-
-
 from model.url_model import URLModel
 import abc
 
