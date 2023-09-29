@@ -7,7 +7,9 @@ import openai
 
 openai.api_key = "{OpenAIのAPIキー}"
 
-open_chat_llm = OpenChatAI(OpenAI(), YahooWebSerachEngine(), DummySearchWordExtractor())
+open_chat_llm = OpenChatAI(llm=OpenAI(),
+                           web_search_engine=YahooWebSerachEngine(),
+                           search_word_extractor=DummySearchWordExtractor())
 query = "WBCでの大谷翔平の活躍は？"
 response = open_chat_llm.ask(query)
 print(response)
