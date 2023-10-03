@@ -23,8 +23,7 @@ git clone https://github.com/HawkClaws/open_chat_ai.git
 ### ライブラリインストール
 
 ```sh
-pip install llama-index
-pip install openai
+pip install llama-index openai litellm
 ```
 
 ### 実行時設定(main.py)
@@ -50,10 +49,9 @@ service.search_word_extractor.SearchWordExtractor
 ```
 
 `llama_index.llms.base.LLM`は`llama_index`のLLMを任意に設定  
-`WebSerachEngine`及び`SearchWordExtractor`は抽象基底クラスがあるため、それをベースに実装を行い設定可能です  
+`WebSerachEngine`は抽象基底クラスがあるため、それをベースに実装を行い設定可能です  
   
-`SearchWordExtractor`は現状`DummySearchWordExtractor`を使用しています  
-pke（[pke_japanese_googlecolab](https://github.com/HawkClaws/pke_japanese_googlecolab)）を使用予定ではありますが、必要なキーワードが削られてしまうなど、まだ調査不足です
+`SearchWordExtractor`はLLMを使用し、検索ワードを取得しています
 
 
 ## 使用方法
